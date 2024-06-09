@@ -17,6 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 
@@ -41,14 +42,18 @@ class MainActivity : ComponentActivity() {
                     },
                     {lineWidth ->
                         pathData.value = pathData.value.copy(
-                            lineWidth=lineWidth
+                            lineWidth = lineWidth
                         )
+                    },
+                    {pathList.removeIf{ pathD ->
+                            pathList[pathList.size - 1] == pathD
+                        }
                     }
                 )
-                {
-                    pathList.removeIf{ pathD ->
-                        pathList[pathList.size - 1] == pathD
-                    }
+                {cap ->
+                    pathData.value = pathData.value.copy(
+                        cap = cap
+                    )
                 }
             }
         }
@@ -65,6 +70,11 @@ fun DrawCanvas(pathData: MutableState<PathData>, pathList: SnapshotStateList<Pat
         .pointerInput(true) {
             detectDragGestures(
                 onDragStart = {
+                    pathList.add(
+                        pathData.value.copy(
+                            path = tempPath
+                        )
+                    )
                     tempPath = Path()
                 },
                 onDragEnd = {
@@ -99,7 +109,9 @@ fun DrawCanvas(pathData: MutableState<PathData>, pathList: SnapshotStateList<Pat
         pathList.forEach{pathData ->
             drawPath(pathData.path,
                 color = pathData.color,
-                style = Stroke(pathData.lineWidth))
+                style = Stroke(
+                    pathData.lineWidth,
+                    cap = pathData.cap))
         }
     }
 }

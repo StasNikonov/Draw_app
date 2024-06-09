@@ -1,5 +1,6 @@
 package com.example.draw_app
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -16,6 +17,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Slider
@@ -31,12 +33,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.input.pointer.PointerIcon.Companion.Text
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun BottomPanel(onClick: (Color) -> Unit,
                 onLineWidthChange: (Float) -> Unit,
-                onBackClick: () -> Unit) {
+                onBackClick: () -> Unit,
+                onCapClick: (StrokeCap) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -49,8 +53,10 @@ fun BottomPanel(onClick: (Color) -> Unit,
         CustomSlider { lineWidth ->
             onLineWidthChange(lineWidth)
         }
-        ButtonPanel {
+        ButtonPanel({
             onBackClick()
+        }) {cap ->
+            onCapClick(cap)
         }
         Spacer(modifier = Modifier.height(5.dp))
     }
@@ -103,22 +109,59 @@ fun CustomSlider(onChange: (Float) -> Unit){
 }
 
 @Composable
-fun ButtonPanel(onClick: () -> Unit){
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 10.dp, end = 10.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ){
-        IconButton( modifier = Modifier
-            .clip(CircleShape)
-            .background(color = Color.White),
-            onClick = {
-            onClick()
-        }) {
-            Icon(Icons.Default.ArrowBack,
-                contentDescription = null)
-
+fun ButtonPanel(onClick: () -> Unit, onCapClick: (StrokeCap) -> Unit){
+    Row(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(0.5f)
+                .padding(start = 10.dp, end = 10.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ){
+            IconButton( modifier = Modifier
+                .clip(CircleShape)
+                .background(color = Color.White),
+                onClick = {
+                    onClick()
+                }) {
+                Icon(Icons.Default.ArrowBack,
+                    contentDescription = null)
+            }
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 10.dp, end = 10.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ){
+            IconButton( modifier = Modifier
+                .clip(CircleShape)
+                .background(color = Color.White),
+                onClick = {
+                    onCapClick(StrokeCap.Square)
+                }) {
+                Icon(Icons.Default.ArrowDropDown,
+                    contentDescription = null)
+            }
+            IconButton( modifier = Modifier
+                .clip(CircleShape)
+                .background(color = Color.White),
+                onClick = {
+                    onCapClick(StrokeCap.Square)
+                }) {
+                Icon(Icons.Default.ArrowDropDown,
+                    contentDescription = null)
+            }
+            IconButton( modifier = Modifier
+                .clip(CircleShape)
+                .background(color = Color.White),
+                onClick = {
+                    onCapClick(StrokeCap.Butt)
+                }) {
+                Icon(Icons.Default.ArrowDropDown,
+                    contentDescription = null)
+            }
         }
     }
+
+
 }
