@@ -2,12 +2,14 @@ package com.example.draw_app
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -18,6 +20,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Slider
@@ -30,6 +33,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.input.pointer.PointerIcon.Companion.Text
@@ -44,7 +48,8 @@ fun BottomPanel(onClick: (Color) -> Unit,
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(color = Color.LightGray),
+            .fillMaxHeight()
+            .background(color = Color.DarkGray),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         ColorList{ color ->
@@ -58,7 +63,6 @@ fun BottomPanel(onClick: (Color) -> Unit,
         }) {cap ->
             onCapClick(cap)
         }
-        Spacer(modifier = Modifier.height(5.dp))
     }
 }
 
@@ -87,6 +91,7 @@ fun ColorList(onClick: (Color) -> Unit){
                 }
                 .size(40.dp)
                 .background(color, CircleShape)
+                .border(2.dp, Color.White, CircleShape)
             )
         }
     }
@@ -99,7 +104,8 @@ fun CustomSlider(onChange: (Float) -> Unit){
     }
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(text = "Line width: ${(position * 100).toInt()}")
+        Text(text = "Line width: ${(position * 100).toInt()}",
+            color = Color.White)
         Slider(value = position, onValueChange = {
             val tempPos = if(it>0) it else 0.01f
             position = tempPos
@@ -110,12 +116,14 @@ fun CustomSlider(onChange: (Float) -> Unit){
 
 @Composable
 fun ButtonPanel(onClick: () -> Unit, onCapClick: (StrokeCap) -> Unit){
-    Row(modifier = Modifier.fillMaxWidth()) {
+    Row(modifier = Modifier
+        .fillMaxWidth()
+        .fillMaxHeight(),
+        verticalAlignment = Alignment.CenterVertically) {
         Row(
             modifier = Modifier
                 .fillMaxWidth(0.5f)
                 .padding(start = 10.dp, end = 10.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
         ){
             IconButton( modifier = Modifier
                 .clip(CircleShape)
